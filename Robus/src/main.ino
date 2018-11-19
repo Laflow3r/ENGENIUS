@@ -37,6 +37,8 @@ void loop() {
   //vibration(3,1000,500);
   walkus();
   //delay(2000);
+  //SuivreLigne();
+  delay(50);
 }
 
 

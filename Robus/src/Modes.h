@@ -22,6 +22,7 @@ int mode = 0;
 
 
 void SuivreLigne() {
+  if(nunchuk.zButton == 1 ) {
   float vitesse = 0.2;
   int a0 = analogRead(0); //Senseur Droite
   int a1 = analogRead(1);
@@ -125,7 +126,8 @@ void SuivreLigne() {
       if(sortie == 1){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,-0.1); }
   }
   delay(50);
-
+  }
+  else{MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);}
 }
 
 
@@ -197,22 +199,31 @@ void PrintNunchuk(){
   Serial.println(nunchuk.cButton, DEC);
 }
 
-void start(int mode){
+void Start(int mode){
 
+int temp = 0;
+
+while(temp<=10){
 
   //mode guide
   if(mode==1){
-  Serial.println("mode 1 selectionne"); vibration(3,500,500);
-  //SuivreLigne();
+  Serial.println("mode 1 selectionne"); //vibration(3,500,500);
+  SuivreLigne();
     }
   else
   //mode libre
   if(mode==2){
-   Serial.println("mode 2 selectionne"); vibration(3,1500,200);  
-  //nunchuck();
+   Serial.println("mode 2 selectionne"); //vibration(3,1500,200);  
+  nunchuck();
   }
+    nunchuk.update(); 
+  delay(100);
 
-
+  if(nunchuk.cButton==1){temp = temp + 1;}
+  if(nunchuk.cButton==0){temp = 0;}
+  Serial.print("temp = "); Serial.print(temp); Serial.println();
+  }
+MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(10,100,100);
 }
 
 void walkus(){
@@ -243,7 +254,7 @@ void walkus(){
 
   temp = temp + 1;
   delay(100);
-  if(temp==10){vibration(3,100,100); start(mode);}
+  if(temp==10){vibration(3,100,100); Start(mode);}
   }
   }
 }
