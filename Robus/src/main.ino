@@ -35,9 +35,7 @@ int nunx,nuny,zbut,cbut;
 int ledPin = 13;
 
 
-void Test_Nunchuck(){
-  // dd
-}
+
 // ...
 void Test_IR(){
   Serial.print(distance_cm(analogRead(8)));
@@ -313,121 +311,7 @@ void Stop(){
 float CmToTic(float cm){
   return ((cm/(7.0*PI))*3600.0);
 }
-//Évite les obstacles à gauche, en face ou à droite
-void Obstacle(){
 
-  int distance = 15;
-  int dist_gauche = distance_cm(analogRead(8));
-  int dist_avant = distance_cm(analogRead(9));
-  int dist_droite = distance_cm(analogRead(11));
-  int dist_correction = 0;
-  int largeur_robot = 25;
-  int dist_apres_correction = 0;
-  int distance_cote = 0;
-  int distance_1er_essai = 0;
-  int distance_2e_essai = 0;
-  int distance_vol_oiseau = 0;
-
-  //Obstacle à gauche =========================================================================
-  if ( dist_gauche < distance) {
-    
-    Stop();
-
-    if (dist_droite > 40){ //Si y'a rien à droite
-      dist_correction = 20; //Valeur standard de correction
-    }else{ //Si y'a qqch à droite
-      dist_correction = (dist_droite / 2) - (largeur_robot / 2) ; //Se corrige pour aller dans le milieu
-    }
-
-    //Se tasse à droite et se remet parrallèle
-    tour(1,3925);
-    avance(CmToTic(dist_correction));
-    tour(0,3925);
-    
-    //Avance jusqu'à ce qu'il n'y aille plus d'objet à gauche
-    dist_apres_correction = distance_cm(analogRead(8));
-    while(distance_cm(analogRead(8)) <= (dist_apres_correction + 5)){
-      checkSpeed(0, 0.3);
-    }
-    avance(CmToTic(largeur_robot));
-
-    //Se remet sur sa trajectoire initiale
-    tour(0,3925);
-    avance(CmToTic(dist_correction));
-    tour(1,3925);
-  }
-  
-  //Obstacle à droite =================================================================================================
-  if ( dist_droite < distance) {
-    
-    Stop();
-
-    if (dist_gauche > 40){ //Si y'a rien à gauche
-      dist_correction = 20; //Valeur standard de correction
-    }else{ //Si y'a qqch à gauche
-      dist_correction = (dist_gauche / 2) - (largeur_robot / 2) ; //Se corrige pour aller dans le milieu
-    }
-
-    //Se tasse à gauche
-    tour(0,3925);
-    avance(CmToTic(dist_correction)); 
-    tour(1,3925);
-
-    //Avance jusqu'à ce qu'il n'y aille plus d'objet
-    dist_apres_correction = distance_cm(analogRead(11));
-    while(distance_cm(analogRead(11)) <= (dist_apres_correction + 5)){ 
-      checkSpeed(0, 0.3);
-    }
-
-    //Revient sur sa trajectoire initiale
-    avance(CmToTic(largeur_robot));
-    tour(1,3925);
-    avance(CmToTic(dist_correction));
-    tour(0,3925);
-  }
-
-  //Obstacle en face ==============================================================================
-  if (dist_avant < distance + (largeur_robot/2)) {
-
-    //Tourne à droite et avance jusqu'à ce qu'il n'y aille plus d'objet OU qu'il y aille quelque chose en face
-    Stop();
-    tour(1,3925);
-    dist_correction = distance_cm(analogRead(8));
-    while(distance_cm(analogRead(8)) <= (dist_correction + 5) && distance_cm(analogRead(9)) > distance){
-      checkSpeed(0, 0.3);
-    }
-    distance_1er_essai = ENCODER_Read(0) + (largeur_robot/2); //La distance qu'il est allé vers la droite
-    
-    //Si il s'est rendu au bout sans problème
-    if(distance_cm(analogRead(8)) >= (dist_correction + 5)){
-      avance(CmToTic(largeur_robot));
-    }
-
-    //S'il y a un objet qui l'empêche il fait un 180 et essaye de l'autre côté
-    // if(distance_cm(analogRead(9)) < distance){
-    //   TournerSurLui(3875,0);
-    //   while(distance_cm(analogRead(8)) <= (dist_correction + 5) && distance_cm(analogRead(9)) > distance){
-    //     checkSpeed(0, 0.3);
-    //   }
-    //   distance_2e_essai = ENCODER_Read(0); //Distance qu'il a fait lorsqu'il revient sur ses pas
-    //   distance_vol_oiseau = abs(distance_2e_essai - distance_1er_essai); //Distance à vol d'oiseau parcourue !!!
-    // }
-    
-
-    // Se remet parrallèle à sa trajectoire initiale et avance jusqu'à ce qu'il n'y aille plus d'objet
-    tour(0,3925);
-    avance(1000);
-    dist_apres_correction = distance_cm(analogRead(8));
-    while(distance_cm(analogRead(8)) <= (dist_apres_correction + 5)){
-      checkSpeed(0, 0.3);
-    }
-
-    //Retourne sur sa trajectoire initiale
-    tour(0,3925);
-    avance(distance_vol_oiseau);
-    tour(1,3925);
-  }
-}
 
 //Fonction pour vibrer, delayOn = temps que le moteur vibre, le delayOff = temps entre les vibrations
 void vibration(int fois,int delayOn, int delayOff){
@@ -461,7 +345,7 @@ void test_rien(){
 
 float doublecheck_dist(int analog_input){
   float dist = 0;
-  float nbr = 50;
+  float nbr = 10;
   for(int i = 0; i < nbr; i++)
     {
       dist += distance_cm(analogRead(analog_input));    
@@ -562,6 +446,7 @@ void perpendiculaire(){
   float dist_temp;
   float dist_avant = 0;
   float dist_1 = 0;
+  float temp = 0;
   int j = 0;
   
       
@@ -577,7 +462,7 @@ void perpendiculaire(){
     }else{
       dist_temp = dist_avant;
     }
-    delay(100);
+    delay(75);
 
     Serial.print("1");
     Serial.print("\t");
@@ -590,7 +475,11 @@ void perpendiculaire(){
   }while(dist_avant < dist_temp);
     j = 0;
     dist_1 = dist_avant;
-       do{
+    temp = dist_avant;
+    dist_avant = 5;
+    dist_temp = 10;
+
+  while(dist_avant < dist_temp && dist_avant < dist_1){
 
     MOTOR_SetSpeed(0,0.3);
     MOTOR_SetSpeed(1,0);
@@ -600,7 +489,7 @@ void perpendiculaire(){
     }else{
       dist_temp = dist_avant;
     }
-    delay(100);
+    delay(75);
 
     Serial.print("2");
     Serial.print("\t");
@@ -610,7 +499,7 @@ void perpendiculaire(){
 
     j++;
     dist_avant = doublecheck_dist(8);
-  }while(dist_avant < dist_temp && dist_avant < dist_1);
+  }
   
   
 
@@ -618,6 +507,7 @@ void perpendiculaire(){
   MOTOR_SetSpeed(1,0);
   Serial.println("DONE");
 }
+
 
 //0 = proche   1 = loin
 int changerDistanceMur(float side, float diff){
@@ -692,7 +582,7 @@ void check_test(){
       dist_temp = doublecheck_dist(8);
       diff = dist_temp - dist_T;
 
-      if (diff != 0){
+      if (diff < -5 || diff > 5){
         changerDistanceMur(1,diff);
       }else{
         checkSpeed(0,0.3);
@@ -719,28 +609,21 @@ void test_90(){
   
 }
 
-void test_checkSpeed_V2(){
-  int dist_a = doublecheck_dist(8);
-  int i = 1;
-  while (i > 0){
-    checkSpeed_V2(dist_a);
-  }
-  
-}
+
 
 void setup(){
 
   BoardInit();
   //check_test();
-  //perpendiculaire();
-  changerDistanceMur(1,5);
+  
+  //changerDistanceMur(1,5);
 }
 
 void loop() {
   
   //allo();
   //Serial.println(distance_cm(analogRead(8)));
-  
+  perpendiculaire();
   delay(10);
 }
 
