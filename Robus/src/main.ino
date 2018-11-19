@@ -502,7 +502,7 @@ void perpendiculaire(){
   }
   
   
-
+  //LAFLEUR
   MOTOR_SetSpeed(0,0);
   MOTOR_SetSpeed(1,0);
   Serial.println("DONE");
