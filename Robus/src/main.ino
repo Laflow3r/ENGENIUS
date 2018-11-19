@@ -20,10 +20,13 @@ Date: 08/11/18
 
 void setup(){
 
-  BoardInit();
+
   //check_test();
   
-  changerDistanceMur(1,5);
+  BoardInit();
+  nunchuk.init();
+  Serial.begin(BAUDRATE);
+  //changerDistanceMur(1,5);
 }
 
 void loop() {
@@ -32,7 +35,8 @@ void loop() {
   //Serial.println(distance_cm(analogRead(8)));
   //perpendiculaire();
   //vibration(3,1000,500);
-  delay(2000);
+  walkus();
+  //delay(2000);
 }
 
 

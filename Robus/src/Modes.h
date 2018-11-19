@@ -18,6 +18,7 @@ int direction;
 int stawp =1;
 int vibrationPin = 8;
 
+int mode = 0;
 
 
 void SuivreLigne() {
@@ -194,6 +195,57 @@ void PrintNunchuk(){
   Serial.print(nunchuk.zButton, DEC);
   Serial.print(' ');
   Serial.println(nunchuk.cButton, DEC);
+}
+
+void start(int mode){
+
+
+  //mode guide
+  if(mode==1){
+  Serial.println("mode 1 selectionne"); vibration(3,500,500);
+  //SuivreLigne();
+    }
+  else
+  //mode libre
+  if(mode==2){
+   Serial.println("mode 2 selectionne"); vibration(3,1500,200);  
+  //nunchuck();
+  }
+
+
+}
+
+void walkus(){
+    int temp = 0;
+  //Choisir le mode d'operation avec le bouton C. Change lorsque le bouton c est relache apres avoir ete appuye seul.
+   nunchuk.update();
+  
+  if(nunchuk.cButton == 1 && nunchuk.zButton == 0){
+  nunchuk.update();                                                     
+  while(nunchuk.cButton==1){delay(10); nunchuk.update();                Serial.println("C enfonce");}
+   nunchuk.update();
+                                                                        Serial.println("C relache");
+   if(mode==0) {mode=1; vibration(1,500,0);}
+  else
+   if(mode==1){mode=2; vibration(2,500,150);}
+  else
+   if(mode==2){mode=1; vibration(1,500,0);}
+
+ Serial.print("\tMode "); Serial.print(mode); Serial.println("");
+  }
+                                                        
+   nunchuk.update();
+
+  //Confirmer la selection du mode en gardant enfonce C et Z pendant 1 seconde
+  if(mode!=0){
+    while(nunchuk.cButton == 0 && nunchuk.zButton == 1){
+       nunchuk.update();
+
+  temp = temp + 1;
+  delay(100);
+  if(temp==10){vibration(3,100,100); start(mode);}
+  }
+  }
 }
 
 #endif
