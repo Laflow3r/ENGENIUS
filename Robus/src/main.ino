@@ -12,7 +12,7 @@ Date: 08/11/18
 #include <Arduino.h>
 #include <Nunchuck.h>
 #include <Wire.h>
-
+//sors pas ton penis
 #define BLANC <100
 #define NOIR >600
 #define CHECKPOINTS 180
