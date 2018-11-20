@@ -54,7 +54,7 @@ void checkSpeed(float diff, float vit_actuelle){
 //Pour tourner avec les 2 moteurs -1 = gauche  1 = droite
 void TournerSurLui(float degre, float side){
 
-  float speed = 0.2;
+  float speed = 0.4;
   int roueDroite=0, roueGauche=0;
   float bias = 1.00638;
 
@@ -63,19 +63,19 @@ void TournerSurLui(float degre, float side){
   if (side == 0){
      do{
 
-    MOTOR_SetSpeed(1,speed);
-    if (roueDroite > degre - 800){
-      if ( speed > 0.1) speed -= 0.05 ;
-    }else if (speed < .4) speed += 0.005;
+    // MOTOR_SetSpeed(1,speed);
+    // if (roueDroite > degre - 800){
+    //   if ( speed > 0.1) speed -= 0.05 ;
+    // }else if (speed < .4) speed += 0.005;
     MOTOR_SetSpeed(1,speed);
     MOTOR_SetSpeed(0,-1*speed);
 
     roueGauche = ENCODER_Read(0) * bias;
     roueDroite = ENCODER_Read(1) ; 
-    if (roueDroite > degre - 800){
-      if ( speed > 0.1) speed -= 0.05 ;
-      else speed = 0.1;
-    }else if (speed < 0.4) speed += 0.005;
+    // if (roueDroite > degre - 800){
+    //   if ( speed > 0.1) speed -= 0.05 ;
+    //   else speed = 0.1;
+    // }else if (speed < 0.4) speed += 0.005;
 
     if (roueDroite > degre) MOTOR_SetSpeed(0,0);
     if ((roueGauche) > degre) MOTOR_SetSpeed(1,0);

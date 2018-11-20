@@ -50,8 +50,11 @@ void allo(){
       }while(distance_cm(analogRead(8)) < distance_mur + 15);
 
       avance(2000);
-      TournerSurLui(2010,0);
-      avance(distance_1er_essai+2000);
+      TournerSurLui(1900,0);
+      Stop();
+      while(analogRead(4) < 500){
+        checkSpeed(0,0.3);
+      }
       TournerSurLui(2010,1);
       delay(5000);
       avance(10000);
@@ -62,7 +65,7 @@ void allo(){
 
 void obstacle_guide_simple(){
   
-  checkSpeed(0,0.3);
+  
   if (doublecheck_dist(9) < 20){
 
       Stop();
@@ -86,9 +89,10 @@ void obstacle_guide_simple(){
   } 
 }
 
-void obstacle_libre_simple(){
+int obstacle_libre_simple(){
   
-  checkSpeed(0,0.3);
+  
+
   if (doublecheck_dist(9) < 20){
 
       Stop();
@@ -106,11 +110,11 @@ void obstacle_libre_simple(){
       int distance_1er_essai = ENCODER_Read(0);
       
       Stop();
-      delay(1000);
+    
       avance(2000);
       TournerSurLui(2010,0);
-      avance(5000);
-      delay(1000);
+      avance(4000);
+      
 
       distance_mur = doublecheck_dist(8);
       do{
@@ -119,13 +123,19 @@ void obstacle_libre_simple(){
 
       avance(2000);
       TournerSurLui(2010,0);
-      avance(distance_1er_essai+2000);
-      TournerSurLui(2010,1);
-      delay(5000);
-      avance(10000);
+      // while(analogRead(4) < 500){
+      //   checkSpeed(0,0.3);
+      // }
+      MOTOR_SetSpeed(0,0.2);
+      MOTOR_SetSpeed(0,0.2);
 
-    
+      // avance(distance_1er_essai+2000);
+      // TournerSurLui(2010,1);
+      
+  
+    return 3;
   } 
+  return 0;
 }
 
 void perpendiculaire(){

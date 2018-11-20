@@ -27,6 +27,9 @@ void setup(){
   nunchuk.init();
   Serial.begin(BAUDRATE);
   //changerDistanceMur(1,5);
+  pinMode(46, OUTPUT);
+  digitalWrite(46,HIGH);
+  //test_90();
 }
 
 void loop() {
@@ -39,6 +42,8 @@ void loop() {
   //delay(2000);
   //SuivreLigne();
   delay(50);
+
+
 }
 
 

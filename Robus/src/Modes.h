@@ -23,7 +23,13 @@ int mode = 0;
 
 void SuivreLigne() {
   if(nunchuk.zButton == 1 ) {
-  float vitesse = 0.2;
+
+  int sortie;
+    
+if(obstacle_libre_simple() == 3) sortie = 3;
+
+  float vitesse = 0.3;
+
   int a0 = analogRead(0); //Senseur Droite
   int a1 = analogRead(1);
   int a2 = analogRead(2);
@@ -36,7 +42,7 @@ void SuivreLigne() {
   //vitesse lorsque le robot avance sur une ligne
   
   //indique le cote que le robot a quitter la ligne
-  int sortie;
+
   MOTOR_SetSpeed(0,vitesse);
   MOTOR_SetSpeed(1,vitesse);
 
@@ -60,21 +66,23 @@ void SuivreLigne() {
   } 
   */
 
+  
+
   //angle droit gauche  
   if((a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && a0 PASNOIR)){
-    MOTOR_SetSpeed(0,0.1);
-    MOTOR_SetSpeed(1,0.1);
+    MOTOR_SetSpeed(0,0.2);
+    MOTOR_SetSpeed(1,0.2);
     delay(150);
-    MOTOR_SetSpeed(0,-0.1);
+    MOTOR_SetSpeed(0,-0.2);
     delay(1500);
   }
 
   //angle droit droite
     if((a0 NOIR && a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a7 PASNOIR)){
-        MOTOR_SetSpeed(0,0.1);
-          MOTOR_SetSpeed(1,0.1);
+        MOTOR_SetSpeed(0,0.2);
+          MOTOR_SetSpeed(1,0.2);
         delay(150);
-          MOTOR_SetSpeed(1,-0.1);
+          MOTOR_SetSpeed(1,-0.2);
             delay(1500);
     }
 
@@ -124,12 +132,14 @@ void SuivreLigne() {
 
       //le robot est sortie par la droite
       if(sortie == 1){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,-0.1); }
-  }
+
+      if(sortie == 3){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,0.1); }
   delay(50);
   }
-  else{MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);}
+ 
 }
-
+  else{MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);}
+  }
 
 //Fonction pour vibrer, delayOn = temps que le moteur vibre, le delayOff = temps entre les vibrations
 void vibration(int fois,int delayOn, int delayOff){
@@ -148,8 +158,6 @@ void bouger(float gauche, float droite){
   MOTOR_SetSpeed(1,droite);
 }
 
-
-
 void arret(float vitesse){
   if(direction == 1){
   while(vitesse > 0){vitesse = vitesse - 0.1; bouger(vitesse,vitesse); delay(100);} }
@@ -160,16 +168,19 @@ void arret(float vitesse){
 
 void nunchuck(){
 
-  float vitesse = 0.5;
+  float vitesse = 0.4;
 
   if(nunchuk.zButton == 1 ) {
+
+    obstacle_guide_simple();
+
   Serial.print("\tstawp: "); Serial.print(stawp); Serial.print("\t ");
   Serial.print("direction: "); Serial.print(direction); Serial.print("\t ");
-
+  //obstacle_guide_simple();
   //arreter
   if(nunchuk.analogX < 190 && nunchuk.analogX > 60 && nunchuk.analogY < 190 && nunchuk.analogY > 60) {Serial.println("STAWP"); if(stawp == 0){arret(vitesse*direction); stawp = 1;} if(stawp==2){bouger(0,0);} stawp = 1;}
   //aller tout droit
-  if(nunchuk.analogY >= 190 ) {checkSpeed(0,vitesse); direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
+  if(nunchuk.analogY >= 190 ) {bouger(vitesse,vitesse);; direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
   //Reculer
   if(nunchuk.analogY <= 60 ) {Serial.println("Beeeeep Beeeeep Beeeeep"); direction = -1; stawp =0; bouger(-vitesse,-vitesse);}
   //Aller a droite
@@ -201,33 +212,38 @@ void PrintNunchuk(){
 
 void Start(int mode){
 
-int temp = 0;
+  int temp = 0;
 
-while(temp<=10){
+  while(temp<=10){
 
-  //mode guide
-  if(mode==1){
-  Serial.println("mode 1 selectionne"); //vibration(3,500,500);
-  SuivreLigne();
+    //mode guide
+
+    if(mode==1){
+    Serial.println("mode 1 selectionne"); //vibration(3,500,500);
+        digitalWrite(46, HIGH);
+    SuivreLigne();
+      }
+    else
+    //mode libre
+    if(mode==2){
+    Serial.println("mode 2 selectionne"); //vibration(3,1500,200);  
+
+
+    nunchuck();
     }
-  else
-  //mode libre
-  if(mode==2){
-   Serial.println("mode 2 selectionne"); //vibration(3,1500,200);  
-  nunchuck();
-  }
-    nunchuk.update(); 
-  delay(100);
+      nunchuk.update(); 
+    delay(100);
 
-  if(nunchuk.cButton==1){temp = temp + 1;}
-  if(nunchuk.cButton==0){temp = 0;}
-  Serial.print("temp = "); Serial.print(temp); Serial.println();
-  }
-MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(10,100,100);
+    if(nunchuk.cButton==1){temp = temp + 1;}
+    if(nunchuk.cButton==0){temp = 0;}
+    Serial.print("temp = "); Serial.print(temp); Serial.println();
+    }
+  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(10,100,100);
 }
 
 void walkus(){
     int temp = 0;
+            
   //Choisir le mode d'operation avec le bouton C. Change lorsque le bouton c est relache apres avoir ete appuye seul.
    nunchuk.update();
   
