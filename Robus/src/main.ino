@@ -18,6 +18,20 @@ Date: 08/11/18
 #include "Tests.h"
 #include "Modes.h"
 
+int IsForward(){
+  nunchuk.update();
+  if(nunchuk.analogY >= 190){return 1;} else {return 0;}
+}
+
+int checkZ(){
+    nunchuk.update();
+  if(nunchuk.zButton == 1){return 1;} else {return 0;};
+}
+
+void UpdateNun(){
+  nunchuk.update();
+}
+
 void setup(){
 
 

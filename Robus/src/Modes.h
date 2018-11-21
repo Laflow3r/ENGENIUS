@@ -19,16 +19,17 @@ int stawp =1;
 int vibrationPin = 8;
 
 int mode = 0;
-
+  int sortie = 0;
 
 void SuivreLigne() {
+  nunchuk.update();
   if(nunchuk.zButton == 1 ) {
 
-  int sortie;
-    
-if(obstacle_libre_simple() == 3) sortie = 3;
 
-  float vitesse = 0.3;
+    
+  if(obstacle_libre_simple() == 3) sortie = 3;
+
+  float vitesse = 0.25;
 
   int a0 = analogRead(0); //Senseur Droite
   int a1 = analogRead(1);
@@ -66,6 +67,14 @@ if(obstacle_libre_simple() == 3) sortie = 3;
   } 
   */
 
+//Apres obstacle
+  if((a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR)){
+  MOTOR_SetSpeed(0,0.2);
+          MOTOR_SetSpeed(1,0.2);
+        delay(150);
+          MOTOR_SetSpeed(1,-0.2);
+            delay(1250);
+  }
   
 
   //angle droit gauche  
@@ -133,7 +142,7 @@ if(obstacle_libre_simple() == 3) sortie = 3;
       //le robot est sortie par la droite
       if(sortie == 1){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,-0.1); }
 
-      if(sortie == 3){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,0.1); }
+      if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
   delay(50);
   }
  

@@ -7,6 +7,11 @@
 #include <Wire.h>
 #include "Base.h"
 
+int checkZ();
+int IsForward();
+void UpdateNun();
+void SuivreLigne();
+
 //Transforme le chiffre retourné par l'infrarouge en distance en cm
 float distance_cm(float dist){
   return (float)(85.624 * pow(2.7182,-0.006*dist));
@@ -63,11 +68,14 @@ void allo(){
   } 
 }
 
+void vibration(int fois,int delayOn, int delayOff);
+
 void obstacle_guide_simple(){
   
   
-  if (doublecheck_dist(9) < 20){
+  if (doublecheck_dist(9) < 20 && IsForward() == 1){
 
+/*
       Stop();
       
       TournerSurLui(2010, 1);
@@ -85,43 +93,59 @@ void obstacle_guide_simple(){
       Stop();
       delay(1000);
       avance(2000);
-      TournerSurLui(2010,0);
+      TournerSurLui(2010,0); */
+      MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);
+      vibration(2,1250,250);
   } 
 }
 
 int obstacle_libre_simple(){
   
-  
+  if(checkZ() == 1){
 
   if (doublecheck_dist(9) < 20){
 
       Stop();
-      
+  UpdateNun();
+  if(checkZ() == 1){SuivreLigne();}
       TournerSurLui(2010, 1);
+  UpdateNun();
+  if(checkZ() == 1){SuivreLigne();}
       ENCODER_Reset(0);
       int distance_mur = distance_cm(analogRead(8));
       if(distance_mur > 40){
         //Tourne tout de suite
       }else{  
         do{
+  UpdateNun();   
+  if(checkZ() == 1){SuivreLigne();}
         checkSpeed(0,0.3);
         }while(doublecheck_dist(8) < distance_mur + 15);
       }
       int distance_1er_essai = ENCODER_Read(0);
-      
+       UpdateNun();
+       if(checkZ() == 1){SuivreLigne();}
       Stop();
-    
+     
       avance(2000);
+         UpdateNun();
+         if(checkZ() == 1){SuivreLigne();}
       TournerSurLui(2010,0);
+         UpdateNun();
+         if(checkZ() == 1){SuivreLigne();}
       avance(4000);
       
-
+   UpdateNun();
+   if(checkZ() == 1){SuivreLigne();}
       distance_mur = doublecheck_dist(8);
       do{
        checkSpeed(0,0.3);
       }while(distance_cm(analogRead(8)) < distance_mur + 15);
-
+   UpdateNun();
+   if(checkZ() == 1){SuivreLigne();}
       avance(2000);
+  UpdateNun();
+  if(checkZ() == 1){SuivreLigne();}
       TournerSurLui(2010,0);
       // while(analogRead(4) < 500){
       //   checkSpeed(0,0.3);
@@ -134,6 +158,7 @@ int obstacle_libre_simple(){
       
   
     return 3;
+  }
   } 
   return 0;
 }
