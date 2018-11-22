@@ -119,18 +119,18 @@ void obstacle_guide_simple(){
 int obstacle_libre_simple(){
 
 
- checkZ();
+      waitZ();
 
   if (doublecheck_dist(9) < 20){
 
 vibration(1,1000,0);
 
       Stop();
-      checkZ();
+      waitZ();
  
       TournerSurLui(2010, 1);
  
-  checkZ();
+      waitZ();
       ENCODER_Reset(0);
       int distance_mur = distance_cm(analogRead(8));
       if(distance_mur > 40){
@@ -138,44 +138,40 @@ vibration(1,1000,0);
       }else{  
         do{
   
-  checkZ();
+      waitZ();
         checkSpeed(0,0.3);
         }while(doublecheck_dist(8) < distance_mur + 15 && Zpressed() == 1);
       }
       int distance_1er_essai = ENCODER_Read(0);
       
-       checkZ();
+      waitZ();
       Stop();
      
        waitZ();
 
        avance(2000);
         
-         checkZ();
       waitZ();
       TournerSurLui(2010,0);
         
-         checkZ();
-        waitZ();
-        avance(4000);
+      waitZ();
+      avance(4000);
       
   
-   checkZ();
+        waitZ();
       distance_mur = doublecheck_dist(8);
       do{
        checkSpeed(0,0.3);
       }while(distance_cm(analogRead(8)) < distance_mur + 15 && Zpressed() == 1);
    
-   checkZ();
      waitZ();
      avance(2000);
  
-  checkZ();
        waitZ();
        TournerSurLui(2010,0);
       
      MOTOR_SetSpeed(0,0.2);
-      MOTOR_SetSpeed(0,0.2); 
+     MOTOR_SetSpeed(1,0.2); 
 
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
