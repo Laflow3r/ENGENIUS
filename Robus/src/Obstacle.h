@@ -7,10 +7,26 @@
 #include <Wire.h>
 #include "Base.h"
 
+int Zpressed();
+int Cpressed();
 int checkZ();
 int IsForward();
 void UpdateNun();
 void SuivreLigne();
+void vibration(int fois,int delayOn, int delayOff);
+
+
+void waitZ(){
+  int temp = 0;
+while(Zpressed() == 0){
+
+  delay(100);
+
+if(Cpressed() ==1){temp = temp + 1;}
+if(Cpressed() ==0){temp = 0;}
+if(temp>=10){vibration(10,100,100); setup();}
+}
+}
 
 //Transforme le chiffre retourné par l'infrarouge en distance en cm
 float distance_cm(float dist){
@@ -24,6 +40,7 @@ float doublecheck_dist(int analog_input){
     {
       dist += distance_cm(analogRead(analog_input));    
       }
+      Serial.println(dist/nbr);
       return (dist / nbr) ;
 }
 
@@ -100,58 +117,65 @@ void obstacle_guide_simple(){
 }
 
 int obstacle_libre_simple(){
-  
-  if(checkZ() == 1){
+
+
+ checkZ();
 
   if (doublecheck_dist(9) < 20){
 
+vibration(1,1000,0);
+
       Stop();
-  UpdateNun();
-  if(checkZ() == 1){SuivreLigne();}
+      checkZ();
+ 
       TournerSurLui(2010, 1);
-  UpdateNun();
-  if(checkZ() == 1){SuivreLigne();}
+ 
+  checkZ();
       ENCODER_Reset(0);
       int distance_mur = distance_cm(analogRead(8));
       if(distance_mur > 40){
         //Tourne tout de suite
       }else{  
         do{
-  UpdateNun();   
-  if(checkZ() == 1){SuivreLigne();}
+  
+  checkZ();
         checkSpeed(0,0.3);
-        }while(doublecheck_dist(8) < distance_mur + 15);
+        }while(doublecheck_dist(8) < distance_mur + 15 && Zpressed() == 1);
       }
       int distance_1er_essai = ENCODER_Read(0);
-       UpdateNun();
-       if(checkZ() == 1){SuivreLigne();}
+      
+       checkZ();
       Stop();
      
-      avance(2000);
-         UpdateNun();
-         if(checkZ() == 1){SuivreLigne();}
+       waitZ();
+
+       avance(2000);
+        
+         checkZ();
+      waitZ();
       TournerSurLui(2010,0);
-         UpdateNun();
-         if(checkZ() == 1){SuivreLigne();}
-      avance(4000);
+        
+         checkZ();
+        waitZ();
+        avance(4000);
       
-   UpdateNun();
-   if(checkZ() == 1){SuivreLigne();}
+  
+   checkZ();
       distance_mur = doublecheck_dist(8);
       do{
        checkSpeed(0,0.3);
-      }while(distance_cm(analogRead(8)) < distance_mur + 15);
-   UpdateNun();
-   if(checkZ() == 1){SuivreLigne();}
-      avance(2000);
-  UpdateNun();
-  if(checkZ() == 1){SuivreLigne();}
-      TournerSurLui(2010,0);
-      // while(analogRead(4) < 500){
-      //   checkSpeed(0,0.3);
-      // }
-      MOTOR_SetSpeed(0,0.2);
-      MOTOR_SetSpeed(0,0.2);
+      }while(distance_cm(analogRead(8)) < distance_mur + 15 && Zpressed() == 1);
+   
+   checkZ();
+     waitZ();
+     avance(2000);
+ 
+  checkZ();
+       waitZ();
+       TournerSurLui(2010,0);
+      
+     MOTOR_SetSpeed(0,0.2);
+      MOTOR_SetSpeed(0,0.2); 
 
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
@@ -159,7 +183,7 @@ int obstacle_libre_simple(){
   
     return 3;
   }
-  } 
+   
   return 0;
 }
 

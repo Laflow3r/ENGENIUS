@@ -18,6 +18,15 @@ Date: 08/11/18
 #include "Tests.h"
 #include "Modes.h"
 
+int Zpressed(){
+  nunchuk.update();
+  return nunchuk.zButton;
+}
+int Cpressed(){
+  nunchuk.update();
+  return nunchuk.cButton;
+}
+
 int IsForward(){
   nunchuk.update();
   if(nunchuk.analogY >= 190){return 1;} else {return 0;}
@@ -25,7 +34,8 @@ int IsForward(){
 
 int checkZ(){
     nunchuk.update();
-  if(nunchuk.zButton == 1){return 1;} else {return 0;};
+    while(nunchuk.zButton =! 1){delay(50); nunchuk.update();}
+return 0;
 }
 
 void UpdateNun(){
@@ -48,6 +58,8 @@ void setup(){
 
 void loop() {
   
+  //doublecheck_dist(9);
+
   //allo();
   //Serial.println(distance_cm(analogRead(8)));
   //perpendiculaire();

@@ -68,17 +68,18 @@ void SuivreLigne() {
   */
 
 //Apres obstacle
-  if((a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR)){
+  if((a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && sortie == 3)){
   MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
           MOTOR_SetSpeed(1,-0.2);
             delay(1250);
+            sortie == 0;
   }
   
 
   //angle droit gauche  
-  if((a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && a0 PASNOIR)){
+  if((a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && a0 PASNOIR && sortie != 3)){
     MOTOR_SetSpeed(0,0.2);
     MOTOR_SetSpeed(1,0.2);
     delay(150);
@@ -87,7 +88,7 @@ void SuivreLigne() {
   }
 
   //angle droit droite
-    if((a0 NOIR && a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a7 PASNOIR)){
+    if((a0 NOIR && a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a7 PASNOIR && sortie != 3)){
         MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
@@ -110,7 +111,7 @@ void SuivreLigne() {
 
 
 
-        MOTOR_SetSpeed(0,0.2);
+        MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
@@ -118,31 +119,33 @@ void SuivreLigne() {
 
     //milieu droite ne detecte pas la ligne mais le gauche oui
     if(a3 PASNOIR && a4 NOIR){
-        MOTOR_SetSpeed(1,0.2);
+        MOTOR_SetSpeed(1,0.3);
         MOTOR_SetSpeed(0,0);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
 
     }
-    //les senseurs milieu ne captent rien
-    if(a3 PASNOIR && a4 PASNOIR){
+  //les senseurs milieu ne captent rien
+  if(a3 PASNOIR && a4 PASNOIR){
 
     if(a5 NOIR){sortie = 1;}
     if(a6 NOIR){sortie = 1;}
-    //if(a7 NOIR){sortie = 1;}
+  
 
     if(a2 NOIR){sortie = 2;}
     if(a1 NOIR){sortie = 2;}
-    //if(a0 NOIR){sortie = 2;}
-    //MOTOR_SetSpeed(0,-0.1); MOTOR_SetSpeed(1,0);
+
   Serial.print(" Sortie: ");  Serial.print(sortie); Serial.println();
-      //le robot est sortie par la gauche
-      if(sortie == 2){ MOTOR_SetSpeed(0,0.1); MOTOR_SetSpeed(1,-0.1); }
-
+  
       //le robot est sortie par la droite
-      if(sortie == 1){ MOTOR_SetSpeed(1,0.1); MOTOR_SetSpeed(0,-0.1); }
+      if(sortie == 1){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,-0.2); }
 
+      //le robot est sortie par la gauche
+      if(sortie == 2){ MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,-0.2); }
+
+      //Le robot est sortie pour eviter un obstacle
       if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
+      
   delay(50);
   }
  
@@ -189,13 +192,13 @@ void nunchuck(){
   //arreter
   if(nunchuk.analogX < 190 && nunchuk.analogX > 60 && nunchuk.analogY < 190 && nunchuk.analogY > 60) {Serial.println("STAWP"); if(stawp == 0){arret(vitesse*direction); stawp = 1;} if(stawp==2){bouger(0,0);} stawp = 1;}
   //aller tout droit
-  if(nunchuk.analogY >= 190 ) {bouger(vitesse,vitesse);; direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
+   else if(nunchuk.analogY >= 190 ) {bouger(vitesse,vitesse);; direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
   //Reculer
-  if(nunchuk.analogY <= 60 ) {Serial.println("Beeeeep Beeeeep Beeeeep"); direction = -1; stawp =0; bouger(-vitesse,-vitesse);}
+  else if(nunchuk.analogY <= 60 ) {Serial.println("Beeeeep Beeeeep Beeeeep"); direction = -1; stawp =0; bouger(-vitesse,-vitesse);}
   //Aller a droite
-  if(nunchuk.analogX >= 190 ) {Serial.println("Tribord toute #droite"); stawp =2; bouger(direction*0.3,0);}
+  else if(nunchuk.analogX >= 190 ) {Serial.println("Tribord toute #droite"); stawp =2; bouger(direction*0.3,0);}
   //Aller a gauche
-  if(nunchuk.analogX <= 60 ) {Serial.println("Babord toute #Gauche"); stawp =2; bouger(0,direction*0.3);}
+  else if(nunchuk.analogX <= 60 ) {Serial.println("Babord toute #Gauche"); stawp =2; bouger(0,direction*0.3);}
   }
   else{bouger(0,0);}
 
@@ -279,7 +282,7 @@ void walkus(){
 
   temp = temp + 1;
   delay(100);
-  if(temp==10){vibration(3,100,100); Start(mode);}
+  if(temp==10){vibration(1,1000,200); vibration(3,233,100); Start(mode);}
   }
   }
 }
