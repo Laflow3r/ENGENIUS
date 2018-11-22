@@ -67,6 +67,12 @@ void SuivreLigne() {
   } 
   */
 
+//Point d'arrivee : Deux lignes noire parallele au robot face aux capteurs 0 et 7 (extremites)
+if((a0 NOIR && a7 NOIR)){
+  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,1000,200); vibration(2,400,200); vibration(1,600,200); vibration(1,200,750); vibration(2,300,200); setup();
+  }
+
+
 //Apres obstacle
   if((a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && sortie == 3)){
   MOTOR_SetSpeed(0,0.2);
@@ -145,7 +151,7 @@ void SuivreLigne() {
 
       //Le robot est sortie pour eviter un obstacle
       if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
-      
+
   delay(50);
   }
  
@@ -256,7 +262,7 @@ void Start(int mode){
 void walkus(){
     int temp = 0;
             
-  //Choisir le mode d'operation avec le bouton C. Change lorsque le bouton c est relache apres avoir ete appuye seul.
+   //Choisir le mode d'operation avec le bouton C. Change lorsque le bouton c est relache apres avoir ete appuye seul.
    nunchuk.update();
   
   if(nunchuk.cButton == 1 && nunchuk.zButton == 0){
