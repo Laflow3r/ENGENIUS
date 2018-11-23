@@ -18,6 +18,30 @@ Date: 08/11/18
 #include "Tests.h"
 #include "Modes.h"
 
+int Zpressed(){
+  nunchuk.update();
+  return nunchuk.zButton;
+}
+int Cpressed(){
+  nunchuk.update();
+  return nunchuk.cButton;
+}
+
+int IsForward(){
+  nunchuk.update();
+  if(nunchuk.analogY >= 190){return 1;} else {return 0;}
+}
+
+int checkZ(){
+    nunchuk.update();
+    while(nunchuk.zButton =! 1){delay(50); nunchuk.update();}
+return 0;
+}
+
+void UpdateNun(){
+  nunchuk.update();
+}
+
 void setup(){
   
   BoardInit();
