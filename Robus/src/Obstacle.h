@@ -204,10 +204,41 @@ void perpendiculaire(){
   Serial.println("DONE");
 }
 
+void perpendiculaire2(){
+
+  int i = 0;
+  int d1 = 50;
+  
+  while(i == 0){
+    MOTOR_SetSpeed(0,0.3);
+    MOTOR_SetSpeed(1,0);
+    if(doublecheck_dist(8) < 30) i = 1;
+  }
+  
+  if ( i == 1){
+    for(int i = 0; i < 2; i++){
+      while (doublecheck_dist(8) < d1 && doublecheck_dist(8) < 30){
+
+        MOTOR_SetSpeed(0,0.3);
+        MOTOR_SetSpeed(1,0);
+
+        d1 = doublecheck_dist(8);
+        delay(100);
+      }
+        MOTOR_SetSpeed(0,0);
+        MOTOR_SetSpeed(0,0);
+    }
+    MOTOR_SetSpeed(0,0);
+    MOTOR_SetSpeed(1,0.3);
+    delay(300);
+    Stop();
+  }
+}
+
 //0 = proche   1 = loin
 int changerDistanceMur(float side, float diff){
 
-  float nbrTic = ((143.0/3.0)*(acos((9.0-(abs(diff)))/9.0)));
+  float nbrTic = acos(diff/20.00)*1279.61;
 
   Serial.print("=============== NBR = "); Serial.print(nbrTic); Serial.println(" ===============");
 
@@ -231,20 +262,21 @@ int changerDistanceMur(float side, float diff){
       }
     }
 
-    // if (diff < 0){
+    if (diff < 0){
       
-    //   while(ENCODER_Read(0) < nbrTic){
-    //     MOTOR_SetSpeed(0,0.3);
-    //     MOTOR_SetSpeed(1,0);
-    //     Serial.print("0\t1\t"); Serial.println(ENCODER_Read(0));
-    //   }
-    //   Stop();
-    //   while(ENCODER_Read(1) < nbrTic){
-    //     MOTOR_SetSpeed(0,0);
-    //     MOTOR_SetSpeed(1,0.3);
-    //     Serial.print("0\t0\t"); Serial.println(ENCODER_Read(1));
-    //   }
-    // }
+      while(ENCODER_Read(0) < nbrTic){
+        MOTOR_SetSpeed(0,0.3);
+        MOTOR_SetSpeed(1,0);
+        Serial.print("0\t1\t"); Serial.println(ENCODER_Read(0));
+      }
+      Stop();
+
+      while(ENCODER_Read(1) < nbrTic){
+        MOTOR_SetSpeed(0,0);
+        MOTOR_SetSpeed(1,0.3);
+        Serial.print("0\t0\t"); Serial.println(ENCODER_Read(1));
+      }
+    }
     Stop();
   }
 
@@ -264,24 +296,25 @@ void SuivreMur(){
   int dist_temp = 0;
   int diff = 0;
 
-  perpendiculaire();
+  perpendiculaire2();
 
   dist_T = doublecheck_dist(8); //Distance T du mur
   
   while(doublecheck_dist(8) < dist_T + 15){
 
-    if (doublecheck_dist(8) > dist_T + 2  || doublecheck_dist(8) < dist_T - 2 ){
+    if (doublecheck_dist(8) > dist_T + 3  || doublecheck_dist(8) < dist_T - 3 ){
       
-      perpendiculaire();
+      perpendiculaire2();
 
       dist_temp = doublecheck_dist(8);
       diff = dist_temp - dist_T;
 
-      if (diff < -5 || diff > 5){
-        changerDistanceMur(1,diff);
-      }else{
-        checkSpeed(0,0.3);
-      }
+      // if (diff < -5 || diff > 5){
+      //   changerDistanceMur(1,diff);
+      // }else{
+      //   checkSpeed(0,0.3);
+      // }
+      changerDistanceMur(1,diff);
     }else{
       checkSpeed(0,0.3);
     }

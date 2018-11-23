@@ -19,28 +19,24 @@ Date: 08/11/18
 #include "Modes.h"
 
 void setup(){
-
-
-  //check_test();
   
   BoardInit();
   nunchuk.init();
   Serial.begin(BAUDRATE);
-  //changerDistanceMur(1,5);
   pinMode(46, OUTPUT);
   digitalWrite(46,HIGH);
-  //test_90();
+  
+
+  
+  
 }
 
 void loop() {
   
-  //allo();
-  //Serial.println(distance_cm(analogRead(8)));
-  //perpendiculaire();
-  //vibration(3,1000,500);
-  walkus();
-  //delay(2000);
-  //SuivreLigne();
+  
+  SuivreMur();
+  delay(3000);
+  
   delay(50);
 
 
