@@ -58,9 +58,9 @@ void setup(){
 void loop() {
   
   
-  SuivreMur();
-  delay(3000);
-  
+  //SuivreMur();
+  //delay(3000);
+  walkus();
   delay(50);
 
 

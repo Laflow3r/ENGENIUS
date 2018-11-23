@@ -16,6 +16,7 @@ void SuivreLigne();
 void vibration(int fois,int delayOn, int delayOff);
 
 
+
 void waitZ(){
   int temp = 0;
 while(Zpressed() == 0){

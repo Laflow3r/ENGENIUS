@@ -14,12 +14,23 @@
 #define BAUDRATE 9600
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
+
+
 int direction;
 int stawp =1;
 int vibrationPin = 8;
-
+void start(int mode);
 int mode = 0;
   int sortie = 0;
+
+void IsLine(){
+int i;
+for(i=0;i<=7;i++){
+  if(analogRead(i) NOIR){start(1);}
+}
+
+}
+
 
 void SuivreLigne() {
   nunchuk.update();
