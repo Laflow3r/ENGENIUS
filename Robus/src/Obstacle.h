@@ -123,7 +123,7 @@ int obstacle_libre_simple(){
 
   if (doublecheck_dist(9) < 20){
 
-vibration(1,1000,0);
+  vibration(1,1000,0);
 
       Stop();
       waitZ();
@@ -172,6 +172,53 @@ vibration(1,1000,0);
       
      MOTOR_SetSpeed(0,0.2);
      MOTOR_SetSpeed(1,0.2); 
+
+      // avance(distance_1er_essai+2000);
+      // TournerSurLui(2010,1);
+      
+  
+    return 3;
+  }
+   
+  return 0;
+}
+
+int obstacle_1(){
+
+
+      waitZ();
+
+  if (doublecheck_dist(9) < 20){
+
+      vibration(1,1000,0);
+      Stop();
+      waitZ();
+ 
+      SuivreMur();
+
+      Stop();
+      waitZ();
+      avance(2000);  
+      waitZ();
+
+      TournerSurLui(2010,0);  
+
+      waitZ();
+      avance(5000);
+      waitZ();
+
+      SuivreMur();
+
+      waitZ();
+      avance(2000);
+      waitZ();
+
+      TournerSurLui(2010,0);
+
+      SuivreMur();
+
+      MOTOR_SetSpeed(0,0.2);
+      MOTOR_SetSpeed(1,0.2); 
 
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
