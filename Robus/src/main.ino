@@ -44,8 +44,11 @@ void UpdateNun(){
 
 void setup(){
   
+  //initialisation
   BoardInit();
   nunchuk.init();
+
+  //Essentiel pour Serial.print les valeurs du nunchuk
   Serial.begin(BAUDRATE);
   pinMode(46, OUTPUT);
   digitalWrite(46,HIGH);
@@ -57,12 +60,16 @@ void setup(){
 
 void loop() {
   
-  
-  //SuivreMur();
-  //delay(3000);
-  walkus();
-  delay(50);
+  //****** Fonction Principale ******
 
+          walkus();        delay(50);
+  
+  // ********************************
+ 
+
+
+//Test_IR();
+//test_ligne();
 
 }
 

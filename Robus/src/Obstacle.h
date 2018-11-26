@@ -12,10 +12,13 @@ int Cpressed();
 int checkZ();
 int IsForward();
 void UpdateNun();
+void IsLine();
 void SuivreLigne();
 void vibration(int fois,int delayOn, int delayOff);
+void SuivreMur(int nbr);
+void walkus();
 
-
+void(* resetFunc) (void) = 0;
 
 void waitZ(){
   int temp = 0;
@@ -25,7 +28,7 @@ while(Zpressed() == 0){
 
 if(Cpressed() ==1){temp = temp + 1;}
 if(Cpressed() ==0){temp = 0;}
-if(temp>=10){vibration(10,100,100); setup();}
+if(temp>=10){vibration(10,50,100); Stop(); resetFunc(); }
 }
 }
 
@@ -113,7 +116,7 @@ void obstacle_guide_simple(){
       avance(2000);
       TournerSurLui(2010,0); */
       MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);
-      vibration(2,1250,250);
+      vibration(2,750,150);
   } 
 }
 
@@ -188,39 +191,45 @@ int obstacle_1(){
 
 
       waitZ();
+      
 
-  if (doublecheck_dist(9) < 20){
+  if (doublecheck_dist(9) < 25){
 
-      vibration(1,1000,0);
+      
       Stop();
       waitZ();
  
-      SuivreMur();
+      SuivreMur(0);
+
+      IsLine();
 
       Stop();
       waitZ();
       avance(2000);  
       waitZ();
 
+        IsLine();
+
       TournerSurLui(2010,0);  
 
       waitZ();
       avance(5000);
       waitZ();
-
-      SuivreMur();
-
+  IsLine();
+      SuivreMur(0);
+  IsLine();
       waitZ();
       avance(2000);
       waitZ();
-
+  IsLine();
       TournerSurLui(2010,0);
-
-      SuivreMur();
-
+      avance(5000);
+  IsLine();
+      SuivreMur(1);
+  IsLine();
       MOTOR_SetSpeed(0,0.2);
       MOTOR_SetSpeed(1,0.2); 
-
+  IsLine();
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
       
@@ -301,20 +310,27 @@ void perpendiculaire2(){
 
   int i = 0;
   int d1 = 50;
-  
-  while(i == 0){
+  ENCODER_ReadReset(0);
+  while(i == 0 && ENCODER_Read(0) <= 8040){
     MOTOR_SetSpeed(0,0.3);
     MOTOR_SetSpeed(1,0);
+    waitZ();
+    IsLine();
     if(doublecheck_dist(8) < 30) i = 1;
+    if(ENCODER_Read(0)>8040) i = 2;
   }
-  
+    ENCODER_ReadReset(0);
   if ( i == 1){
     for(int i = 0; i < 2; i++){
-      while (doublecheck_dist(8) < d1 && doublecheck_dist(8) < 30){
-
+          waitZ();
+          IsLine();
+          int y = 0;
+      while (doublecheck_dist(8) < d1 && doublecheck_dist(8) < 30 && y < 40){
+y = y + 1;
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
-
+waitZ();
+IsLine();
         d1 = doublecheck_dist(8);
         delay(100);
       }
@@ -324,6 +340,8 @@ void perpendiculaire2(){
     MOTOR_SetSpeed(0,0);
     MOTOR_SetSpeed(1,0.3);
     delay(300);
+waitZ();
+IsLine();
     Stop();
   }
 }
@@ -380,7 +398,23 @@ int changerDistanceMur(float side, float diff){
 
 }
     
-void SuivreMur(){
+int IsBlack(int nbr){
+  int ligne = 0;int i;
+  if (nbr == 1){ 
+  for(i=0;i<=7;i++)
+  {
+  if(analogRead(i) > 600)
+  {
+    ligne=1;
+
+  }
+}
+
+return ligne;
+}
+}
+
+void SuivreMur(int nbr){
 
   
   float change = 0.1;
@@ -391,12 +425,18 @@ void SuivreMur(){
 
   perpendiculaire2();
 
+waitZ();
+IsLine();
+
   dist_T = doublecheck_dist(8); //Distance T du mur
   
-  while(doublecheck_dist(8) < dist_T + 15){
+  while(doublecheck_dist(8) < dist_T + 15 && IsBlack(nbr) == 0){
 
     if (doublecheck_dist(8) > dist_T + 3  || doublecheck_dist(8) < dist_T - 3 ){
       
+waitZ();
+IsLine();
+
       perpendiculaire2();
 
       dist_temp = doublecheck_dist(8);
@@ -413,7 +453,9 @@ void SuivreMur(){
     }
   }
   Stop();
-  delay(3000);
+  
+waitZ();
+IsLine();
   //HAHA MOI CEST JACOB
 }
 

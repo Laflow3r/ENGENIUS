@@ -10,7 +10,7 @@
 
 #define BLANC <100
 #define NOIR >600
-#define PASNOIR <500
+#define PASNOIR <600
 #define BAUDRATE 9600
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
@@ -19,17 +19,15 @@ ArduinoNunchuk nunchuk = ArduinoNunchuk();
 int direction;
 int stawp =1;
 int vibrationPin = 8;
-void start(int mode);
+void Start(int mode);
 int mode = 0;
-  int sortie = 0;
+int sortie = 0;
+int obstacle_1();
 
-void IsLine(){
+void IsLine(){ 
 int i;
-for(i=0;i<=7;i++){
-  if(analogRead(i) NOIR){start(1);}
-}
-
-}
+for(i=0;i<=7;i++){if(analogRead(i) NOIR){Start(1);}
+}}
 
 
 void SuivreLigne() {
@@ -38,7 +36,7 @@ void SuivreLigne() {
 
 
     
-  if(obstacle_libre_simple() == 3) sortie = 3;
+  if(obstacle_1() == 3) sortie = 3;
 
   float vitesse = 0.25;
 
@@ -79,8 +77,8 @@ void SuivreLigne() {
   */
 
 //Point d'arrivee : Deux lignes noire parallele au robot face aux capteurs 0 et 7 (extremites)
-if((a0 NOIR && a7 NOIR)){
-  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,1000,200); vibration(2,400,200); vibration(1,600,200); vibration(1,200,750); vibration(2,300,200); setup();
+if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
+  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,1000,200); /*vibration(2,400,200); vibration(1,600,200); vibration(1,200,750); vibration(2,300,200);*/resetFunc();
   }
 
 
@@ -101,7 +99,7 @@ if((a0 NOIR && a7 NOIR)){
     MOTOR_SetSpeed(1,0.2);
     delay(150);
     MOTOR_SetSpeed(0,-0.2);
-    delay(1500);
+    delay(1000);
   }
 
   //angle droit droite
@@ -110,7 +108,7 @@ if((a0 NOIR && a7 NOIR)){
           MOTOR_SetSpeed(1,0.2);
         delay(150);
           MOTOR_SetSpeed(1,-0.2);
-            delay(1500);
+            delay(1000);
     }
 
     //Le robot est sur la ligne (senseurs milieu voient du noir)
@@ -128,7 +126,7 @@ if((a0 NOIR && a7 NOIR)){
 
 
 
-        MOTOR_SetSpeed(0,0.3);
+        MOTOR_SetSpeed(0,0.2);
         MOTOR_SetSpeed(1,0);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
@@ -136,7 +134,7 @@ if((a0 NOIR && a7 NOIR)){
 
     //milieu droite ne detecte pas la ligne mais le gauche oui
     if(a3 PASNOIR && a4 NOIR){
-        MOTOR_SetSpeed(1,0.3);
+        MOTOR_SetSpeed(1,0.2);
         MOTOR_SetSpeed(0,0);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
@@ -163,7 +161,7 @@ if((a0 NOIR && a7 NOIR)){
       //Le robot est sortie pour eviter un obstacle
       if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
 
-  delay(50);
+  //delay(50);
   }
  
 }
@@ -275,7 +273,11 @@ void walkus(){
             
    //Choisir le mode d'operation avec le bouton C. Change lorsque le bouton c est relache apres avoir ete appuye seul.
    nunchuk.update();
-  
+
+     if(nunchuk.cButton == 1 && nunchuk.zButton == 1){
+   while(nunchuk.accelZ > 950){temp = temp + 1; delay(100); if(temp==10){vibration(1,10000,0); resetFunc();}}
+     }
+
   if(nunchuk.cButton == 1 && nunchuk.zButton == 0){
   nunchuk.update();                                                     
   while(nunchuk.cButton==1){delay(10); nunchuk.update();                Serial.println("C enfonce");}
