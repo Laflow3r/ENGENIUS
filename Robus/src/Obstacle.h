@@ -7,6 +7,8 @@
 #include <Wire.h>
 #include "Base.h"
 
+
+int premierefois = 0;
 int Zpressed();
 int Cpressed();
 int checkZ();
@@ -23,9 +25,9 @@ void(* resetFunc) (void) = 0;
 void waitZ(){
   int temp = 0;
 while(Zpressed() == 0){
-
+digitalWrite(8, LOW);
   delay(100);
-
+MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(0,0);
 if(Cpressed() ==1){temp = temp + 1;}
 if(Cpressed() ==0){temp = 0;}
 if(temp>=10){vibration(10,50,100); Stop(); resetFunc(); }
@@ -196,12 +198,14 @@ int obstacle_1(){
   if (doublecheck_dist(9) < 25){
 
       
+      //if(premierefois == 0){ digitalWrite(8, HIGH); delay(250); Stop();  delay(750); premierefois = 1; }
       Stop();
+
       waitZ();
- 
+     
       SuivreMur(0);
 
-      IsLine();
+      //IsLine();
 
       Stop();
       waitZ();
@@ -213,23 +217,29 @@ int obstacle_1(){
       TournerSurLui(2010,0);  
 
       waitZ();
-      avance(5000);
+      avance(4500);
       waitZ();
   IsLine();
-      SuivreMur(0);
+      //SuivreMur(0);
+
+      float dist_T = doublecheck_dist(8); //Distance T du mur
+  
+  while(doublecheck_dist(8) < dist_T + 15){ MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,0.2);}
+
   IsLine();
       waitZ();
       avance(2000);
       waitZ();
   IsLine();
       TournerSurLui(2010,0);
-      avance(5000);
+     // avance(2000); //retour sur la ligne
   IsLine();
       SuivreMur(1);
   IsLine();
       MOTOR_SetSpeed(0,0.2);
       MOTOR_SetSpeed(1,0.2); 
   IsLine();
+
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
       
@@ -314,25 +324,27 @@ void perpendiculaire2(){
   while(i == 0 && ENCODER_Read(0) <= 8040){
     MOTOR_SetSpeed(0,0.3);
     MOTOR_SetSpeed(1,0);
+  
     waitZ();
-    IsLine();
+    //IsLine();
     if(doublecheck_dist(8) < 30) i = 1;
-    if(ENCODER_Read(0)>8040) i = 2;
+    //if(ENCODER_Read(0)>8040) i = 2;
   }
     ENCODER_ReadReset(0);
   if ( i == 1){
     for(int i = 0; i < 2; i++){
           waitZ();
-          IsLine();
+          //IsLine();
           int y = 0;
       while (doublecheck_dist(8) < d1 && doublecheck_dist(8) < 30 && y < 40){
 y = y + 1;
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
 waitZ();
-IsLine();
+
         d1 = doublecheck_dist(8);
         delay(100);
+      
       }
         MOTOR_SetSpeed(0,0);
         MOTOR_SetSpeed(0,0);
@@ -340,10 +352,13 @@ IsLine();
     MOTOR_SetSpeed(0,0);
     MOTOR_SetSpeed(1,0.3);
     delay(300);
-waitZ();
-IsLine();
-    Stop();
+      digitalWrite(8, LOW);
+ Stop();
+ waitZ();
+//IsLine();
+   
   }
+    //IsLine();
 }
 
 //0 = proche   1 = loin
@@ -358,8 +373,8 @@ int changerDistanceMur(float side, float diff){
   }
   if (side == 1){
     Stop();
-    if (diff > 0){
-      
+    if (diff > 0 ){
+      //ne jamais bloquer les roues
       while(ENCODER_Read(1) < nbrTic){
         MOTOR_SetSpeed(0,0);
         MOTOR_SetSpeed(1,0.3);
@@ -410,8 +425,9 @@ int IsBlack(int nbr){
   }
 }
 
-return ligne;
+
 }
+return ligne;
 }
 
 void SuivreMur(int nbr){
@@ -426,7 +442,7 @@ void SuivreMur(int nbr){
   perpendiculaire2();
 
 waitZ();
-IsLine();
+if(nbr!=0) IsLine();
 
   dist_T = doublecheck_dist(8); //Distance T du mur
   
@@ -435,7 +451,7 @@ IsLine();
     if (doublecheck_dist(8) > dist_T + 3  || doublecheck_dist(8) < dist_T - 3 ){
       
 waitZ();
-IsLine();
+if(nbr!=0) IsLine();
 
       perpendiculaire2();
 
@@ -455,7 +471,7 @@ IsLine();
   Stop();
   
 waitZ();
-IsLine();
+if(nbr!=0) IsLine();
   //HAHA MOI CEST JACOB
 }
 

@@ -83,18 +83,18 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
 
 
 //Apres obstacle
-  if((a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && sortie == 3)){
+  if((a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && sortie == 3)){
   MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
           MOTOR_SetSpeed(1,-0.2);
             delay(1250);
-            sortie == 0;
+            sortie = 0;
   }
   
 
   //angle droit gauche  
-  if((a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && a0 PASNOIR && sortie != 3)){
+  if(( a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a0 PASNOIR && sortie != 3)){
     MOTOR_SetSpeed(0,0.2);
     MOTOR_SetSpeed(1,0.2);
     delay(150);
@@ -124,10 +124,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
     //milieu gauche ne detecte pas la ligne mais le droit oui (sort a gauche)
     if(a3 NOIR && a4 PASNOIR){
 
-
-
         MOTOR_SetSpeed(0,0.2);
-        MOTOR_SetSpeed(1,0);
+        MOTOR_SetSpeed(1,0.1);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
     }
@@ -135,7 +133,7 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
     //milieu droite ne detecte pas la ligne mais le gauche oui
     if(a3 PASNOIR && a4 NOIR){
         MOTOR_SetSpeed(1,0.2);
-        MOTOR_SetSpeed(0,0);
+        MOTOR_SetSpeed(0,0.1);
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
 
