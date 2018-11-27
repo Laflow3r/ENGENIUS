@@ -36,7 +36,7 @@ void SuivreLigne() {
 
 
     
-  if(obstacle_1() == 3) sortie = 3;
+  if(obstacle_1() == 3) {sortie = 3; Serial.println("Je suis sortie de la caliss de fonction pis sortie = 3");}
 
   float vitesse = 0.25;
 
@@ -76,22 +76,29 @@ void SuivreLigne() {
   } 
   */
 
-//Point d'arrivee : Deux lignes noire parallele au robot face aux capteurs 0 et 7 (extremites)
-if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
-  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,1000,200); /*vibration(2,400,200); vibration(1,600,200); vibration(1,200,750); vibration(2,300,200);*/resetFunc();
-  }
-
-
+while(sortie == 3){
 //Apres obstacle
-  if((a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && sortie == 3)){
+Serial.println("Je cherche une ligne (sortie 3)");
+waitZ();
+MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,0.2);
+  if(IsBlack(1)==1){
+    Serial.println("ligne trouve");
   MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
           MOTOR_SetSpeed(1,-0.2);
-            delay(1250);
+            delay(1000);
             sortie = 0;
+            delay(50);
   }
+}
   
+//Point d'arrivee : Deux lignes noire parallele au robot face aux capteurs 0 et 7 (extremites)
+if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
+  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,200,200); vibration(1,400,200); vibration(1,600,200); vibration(1,800,0);/* vibration(2,300,200);*/resetFunc();
+  }
+
+
 
   //angle droit gauche  
   if(( a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a0 PASNOIR && sortie != 3)){
@@ -157,7 +164,7 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
       if(sortie == 2){ MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,-0.2); }
 
       //Le robot est sortie pour eviter un obstacle
-      if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
+      //if(sortie == 3){ MOTOR_SetSpeed(1,0.2); MOTOR_SetSpeed(0,0.2); }
 
   //delay(50);
   }

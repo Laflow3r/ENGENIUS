@@ -24,7 +24,9 @@ void(* resetFunc) (void) = 0;
 
 void waitZ(){
   int temp = 0;
+  UpdateNun();
 while(Zpressed() == 0){
+  UpdateNun();
 digitalWrite(8, LOW);
   delay(100);
 MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(0,0);
@@ -230,15 +232,15 @@ int obstacle_1(){
       waitZ();
       avance(2000);
       waitZ();
-  IsLine();
+  //IsLine();
       TournerSurLui(2010,0);
      // avance(2000); //retour sur la ligne
-  IsLine();
-      SuivreMur(1);
-  IsLine();
+  //IsLine();
+      //SuivreMur(1);
+  //IsLine();
       MOTOR_SetSpeed(0,0.2);
       MOTOR_SetSpeed(1,0.2); 
-  IsLine();
+  //IsLine();
 
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
@@ -318,46 +320,67 @@ void perpendiculaire(){
 
 void perpendiculaire2(){
 
+
   int i = 0;
-  int d1 = 50;
+  int d1 = 100;
   ENCODER_ReadReset(0);
-  while(i == 0 && ENCODER_Read(0) <= 8040){
+  while(i == 0){
+    Serial.println("boucle 1");
     MOTOR_SetSpeed(0,0.3);
     MOTOR_SetSpeed(1,0);
   
     waitZ();
     //IsLine();
+
+
+
+    //Stop(); delay(300);
+
+
+
     if(doublecheck_dist(8) < 30) i = 1;
     //if(ENCODER_Read(0)>8040) i = 2;
   }
-    ENCODER_ReadReset(0);
-  if ( i == 1){
+ 
+  //if ( i == 1){
     for(int i = 0; i < 2; i++){
+
+        int compteur = 0;
+        //Stop(); delay(1000);
+
+          Serial.println("boucle 2");
           waitZ();
           //IsLine();
-          int y = 0;
-      while (doublecheck_dist(8) < d1 && doublecheck_dist(8) < 30 && y < 40){
-y = y + 1;
+
+          // 8 = gauche
+         
+      while (compteur < 2 && doublecheck_dist(8) < 30 ){
+    Serial.println("boucle d1");
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
 waitZ();
 
         d1 = doublecheck_dist(8);
+        if(d1 < doublecheck_dist(8)){compteur = compteur + 1;} else compteur = 0;
+      Serial.println(compteur);
         delay(100);
-      
+
+        //Stop(); delay(1000);
       }
+
         MOTOR_SetSpeed(0,0);
         MOTOR_SetSpeed(0,0);
     }
+        Serial.println("sortie boucle 2");
     MOTOR_SetSpeed(0,0);
     MOTOR_SetSpeed(1,0.3);
-    delay(300);
-      digitalWrite(8, LOW);
+    delay(300); //etait 300
+      //digitalWrite(8, LOW);
  Stop();
  waitZ();
 //IsLine();
    
-  }
+  //}
     //IsLine();
 }
 
@@ -447,13 +470,13 @@ if(nbr!=0) IsLine();
   dist_T = doublecheck_dist(8); //Distance T du mur
   
   while(doublecheck_dist(8) < dist_T + 15 && IsBlack(nbr) == 0){
-
+waitZ();
     if (doublecheck_dist(8) > dist_T + 3  || doublecheck_dist(8) < dist_T - 3 ){
       
 waitZ();
 if(nbr!=0) IsLine();
 
-      perpendiculaire2();
+      //perpendiculaire2();
 
       dist_temp = doublecheck_dist(8);
       diff = dist_temp - dist_T;
@@ -463,7 +486,7 @@ if(nbr!=0) IsLine();
       // }else{
       //   checkSpeed(0,0.3);
       // }
-      changerDistanceMur(1,diff);
+   //   changerDistanceMur(1,diff);
     }else{
       checkSpeed(0,0.3);
     }

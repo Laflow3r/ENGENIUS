@@ -29,11 +29,11 @@ void test_ligne(){
 //7850 = 180 deg
 void test_rien(){
   
-  Serial.print(distance_cm(analogRead(8)));
+  Serial.print(distance_cm(analogRead(8))); //gauche
   Serial.print("\t");
-  Serial.print(distance_cm(analogRead(9)));
+  Serial.print(distance_cm(analogRead(9))); //avant
   Serial.print("\t");
-  Serial.println(distance_cm(analogRead(11)));
+  Serial.println(distance_cm(analogRead(11))); //droite
   delay(1000);
   
 }

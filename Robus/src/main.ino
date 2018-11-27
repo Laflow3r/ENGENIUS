@@ -65,11 +65,14 @@ void loop() {
           walkus();        delay(50);
   
   // ********************************
- 
 
+ //MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,0.2);
+ // if (doublecheck_dist(9) < 25){ Stop(); perpendiculaire2();}
 
 //Test_IR();
 //test_ligne();
+
+
 
 }
 
