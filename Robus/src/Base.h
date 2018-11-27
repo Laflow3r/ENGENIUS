@@ -38,7 +38,7 @@ void checkSpeed(float diff, float vit_actuelle){
   }
   
   
-    
+  
   if ((nbr0 > nbr1)) {
     MOTOR_SetSpeed(0, vit_actuelle * (1-changement)); 
     MOTOR_SetSpeed(1, vit_actuelle * (1+changement)); 

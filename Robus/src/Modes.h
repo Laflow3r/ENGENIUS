@@ -9,8 +9,8 @@
 #include "Base.h"
 
 #define BLANC <100
-#define NOIR >600
-#define PASNOIR <600
+#define NOIR >400
+#define PASNOIR <400
 #define BAUDRATE 9600
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
@@ -197,6 +197,7 @@ void arret(float vitesse){
   bouger(0,0);
   stawp = 1;
 }
+  int i = 0;
 
 void nunchuck(){
 
@@ -204,7 +205,11 @@ void nunchuck(){
 
   if(nunchuk.zButton == 1 ) {
 
-    obstacle_guide_simple();
+delay(10);
+
+  obstacle_guide_simple();
+    
+   
 
   Serial.print("\tstawp: "); Serial.print(stawp); Serial.print("\t ");
   Serial.print("direction: "); Serial.print(direction); Serial.print("\t ");
@@ -221,6 +226,7 @@ void nunchuck(){
   else if(nunchuk.analogX <= 60 ) {Serial.println("Babord toute #Gauche"); stawp =2; bouger(0,direction*0.3);}
   }
   else{bouger(0,0);}
+  digitalWrite(8, LOW); i =0;
 
 }
 
@@ -270,7 +276,7 @@ void Start(int mode){
     if(nunchuk.cButton==0){temp = 0;}
     Serial.print("temp = "); Serial.print(temp); Serial.println();
     }
-  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(10,100,100);
+  MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(5,200,100);
 }
 
 void walkus(){

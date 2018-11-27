@@ -32,7 +32,7 @@ digitalWrite(8, LOW);
 MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(0,0);
 if(Cpressed() ==1){temp = temp + 1;}
 if(Cpressed() ==0){temp = 0;}
-if(temp>=10){vibration(10,50,100); Stop(); resetFunc(); }
+if(temp>=10){vibration(5,200,100); Stop(); resetFunc(); }
 }
 }
 
@@ -99,29 +99,10 @@ void obstacle_guide_simple(){
   
   
   if (doublecheck_dist(9) < 20 && IsForward() == 1){
-
-/*
-      Stop();
-      
-      TournerSurLui(2010, 1);
-      ENCODER_Reset(0);
-      int distance_mur = distance_cm(analogRead(8));
-      if(distance_mur > 40){
-        //Tourne tout de suite
-      }else{ 
-        do{
-        checkSpeed(0,0.3);
-        }while(doublecheck_dist(8) < distance_mur + 15);
-      }
-      int distance_1er_essai = ENCODER_Read(0);
-      
-      Stop();
-      delay(1000);
-      avance(2000);
-      TournerSurLui(2010,0); */
       MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);
       vibration(2,750,150);
-  } 
+      
+  }
 }
 
 int obstacle_libre_simple(){
@@ -197,9 +178,15 @@ int obstacle_1(){
       waitZ();
       
 
-  if (doublecheck_dist(9) < 25){
+  if (doublecheck_dist(9) < 10){
+Stop();
+vibration(1,1500,0);
+      while(doublecheck_dist(9)<=25){
+        MOTOR_SetSpeed(0,-0.2);
+        MOTOR_SetSpeed(1,-0.2);
+        }
 
-      
+
       //if(premierefois == 0){ digitalWrite(8, HIGH); delay(250); Stop();  delay(750); premierefois = 1; }
       Stop();
 
@@ -230,7 +217,7 @@ int obstacle_1(){
 
   IsLine();
       waitZ();
-      avance(2000);
+      avance(3500);
       waitZ();
   //IsLine();
       TournerSurLui(2010,0);
@@ -488,7 +475,7 @@ if(nbr!=0) IsLine();
       // }
    //   changerDistanceMur(1,diff);
     }else{
-      checkSpeed(0,0.3);
+      checkSpeed(0,0.3); waitZ();
     }
   }
   Stop();

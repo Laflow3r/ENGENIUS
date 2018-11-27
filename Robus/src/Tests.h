@@ -19,7 +19,14 @@ void Test_Servo(){
 }
 // ...
 void test_ligne(){
- Serial.println(analogRead(0));
+ Serial.print("a0 : "); Serial.println(analogRead(0));
+ Serial.print("a1 : "); Serial.println(analogRead(1));
+ Serial.print("a2 : "); Serial.println(analogRead(2));
+ Serial.print("a3 : "); Serial.println(analogRead(3));
+ Serial.print("a4 : "); Serial.println(analogRead(4));
+ Serial.print("a5 : "); Serial.println(analogRead(5));
+ Serial.print("a6 : "); Serial.println(analogRead(6));
+ Serial.print("a7 : "); Serial.println(analogRead(7));
 }
 
 // ...
