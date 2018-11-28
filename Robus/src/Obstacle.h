@@ -19,7 +19,7 @@ void SuivreLigne();
 void vibration(int fois,int delayOn, int delayOff);
 void SuivreMur(int nbr);
 void walkus();
-
+void Start(int mode);
 void(* resetFunc) (void) = 0;
 
 void waitZ(){
@@ -27,12 +27,12 @@ void waitZ(){
   UpdateNun();
 while(Zpressed() == 0){
   UpdateNun();
-digitalWrite(8, LOW);
+
   delay(100);
 MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(0,0);
 if(Cpressed() ==1){temp = temp + 1;}
 if(Cpressed() ==0){temp = 0;}
-if(temp>=10){vibration(5,200,100); Stop(); resetFunc(); }
+if(temp>=10){vibration(5,200,100); Stop(); resetFunc(); Start(1); }
 }
 }
 
@@ -202,7 +202,8 @@ vibration(1,1500,0);
       waitZ();
 
         IsLine();
-
+    Stop();
+    vibration(2,250,150);
       TournerSurLui(2010,0);  
 
       waitZ();
@@ -220,6 +221,8 @@ vibration(1,1500,0);
       avance(3500);
       waitZ();
   //IsLine();
+      Stop();
+    vibration(2,250,150);
       TournerSurLui(2010,0);
      // avance(2000); //retour sur la ligne
   //IsLine();
@@ -310,9 +313,11 @@ void perpendiculaire2(){
 
   int i = 0;
   int d1 = 100;
+  int VibreUneFoisOsti = 0;
   ENCODER_ReadReset(0);
   while(i == 0){
     Serial.println("boucle 1");
+    if(VibreUneFoisOsti == 0){Stop(); vibration(1,400,150); VibreUneFoisOsti = 1;}
     MOTOR_SetSpeed(0,0.3);
     MOTOR_SetSpeed(1,0);
   
@@ -341,15 +346,16 @@ void perpendiculaire2(){
 
           // 8 = gauche
          
-      while (compteur < 2 && doublecheck_dist(8) < 30 ){
+      while (compteur < 2 && doublecheck_dist(8) < 100 ){
     Serial.println("boucle d1");
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
 waitZ();
 
         d1 = doublecheck_dist(8);
-        if(d1 < doublecheck_dist(8)){compteur = compteur + 1;} else compteur = 0;
-      Serial.println(compteur);
+        if(d1 < doublecheck_dist(8) && doublecheck_dist(8) - d1 <10){Serial.println("*********************"); Serial.print("d1 : "); Serial.print(d1);Serial.println("\tnouvelle distance"); Serial.print(doublecheck_dist(8)); Serial.println("*********************");
+        compteur = compteur + 1;} else compteur = 0;
+      //Serial.println(compteur);
         delay(100);
 
         //Stop(); delay(1000);
@@ -359,6 +365,7 @@ waitZ();
         MOTOR_SetSpeed(0,0);
     }
         Serial.println("sortie boucle 2");
+ 
     MOTOR_SetSpeed(0,0);
     MOTOR_SetSpeed(1,0.3);
     delay(300); //etait 300

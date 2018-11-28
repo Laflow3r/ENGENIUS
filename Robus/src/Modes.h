@@ -86,8 +86,12 @@ MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,0.2);
   MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
+    Stop();
+    vibration(1,400,150);
           MOTOR_SetSpeed(1,-0.2);
-            delay(1000);
+          MOTOR_SetSpeed(0,0.2);
+            delay(500);
+            if(analogRead(3) PASNOIR && analogRead(4) PASNOIR) delay(500);
             sortie = 0;
             delay(50);
   }
@@ -101,10 +105,13 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
 
 
   //angle droit gauche  
-  if(( a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a0 PASNOIR && sortie != 3)){
+  if(( a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && a0 PASNOIR && sortie != 3)){
     MOTOR_SetSpeed(0,0.2);
     MOTOR_SetSpeed(1,0.2);
     delay(150);
+    Stop();
+    vibration(2,250,150);
+    MOTOR_SetSpeed(1,0.2);
     MOTOR_SetSpeed(0,-0.2);
     delay(1000);
   }
@@ -114,7 +121,10 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
         MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
         delay(150);
+    Stop();
+    vibration(1,400,150);
           MOTOR_SetSpeed(1,-0.2);
+          MOTOR_SetSpeed(0,0.2);
             delay(1000);
     }
 
@@ -226,7 +236,7 @@ delay(10);
   else if(nunchuk.analogX <= 60 ) {Serial.println("Babord toute #Gauche"); stawp =2; bouger(0,direction*0.3);}
   }
   else{bouger(0,0);}
-  digitalWrite(8, LOW); i =0;
+  
 
 }
 

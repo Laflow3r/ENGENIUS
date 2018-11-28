@@ -176,7 +176,7 @@ void avance(int distance){
     }
     else
     {
-      vitesse  = 0.6;
+      vitesse  = 0.4;
     }
     checkSpeed(0,vitesse);
 
