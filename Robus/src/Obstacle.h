@@ -29,7 +29,7 @@ while(Zpressed() == 0){
   UpdateNun();
 
   delay(100);
-MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(0,0);
+MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);
 if(Cpressed() ==1){temp = temp + 1;}
 if(Cpressed() ==0){temp = 0;}
 if(temp>=10){vibration(5,200,100); Stop(); resetFunc(); Start(1); }
@@ -181,9 +181,11 @@ int obstacle_1(){
   if (doublecheck_dist(9) < 10){
 Stop();
 vibration(1,1500,0);
+waitZ();
       while(doublecheck_dist(9)<=25){
         MOTOR_SetSpeed(0,-0.2);
         MOTOR_SetSpeed(1,-0.2);
+        
         }
 
 
@@ -235,7 +237,7 @@ vibration(1,1500,0);
       // avance(distance_1er_essai+2000);
       // TournerSurLui(2010,1);
       
-  
+  waitZ();
     return 3;
   }
    
@@ -346,7 +348,7 @@ void perpendiculaire2(){
 
           // 8 = gauche
          
-      while (compteur < 2 && doublecheck_dist(8) < 100 ){
+      while (compteur < 3 && doublecheck_dist(8) < 100 ){
     Serial.println("boucle d1");
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0);
@@ -356,7 +358,7 @@ waitZ();
         if(d1 < doublecheck_dist(8) && doublecheck_dist(8) - d1 <10){Serial.println("*********************"); Serial.print("d1 : "); Serial.print(d1);Serial.println("\tnouvelle distance"); Serial.print(doublecheck_dist(8)); Serial.println("*********************");
         compteur = compteur + 1;} else compteur = 0;
       //Serial.println(compteur);
-        delay(100);
+        delay(50);
 
         //Stop(); delay(1000);
       }

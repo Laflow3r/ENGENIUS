@@ -75,6 +75,7 @@ void SuivreLigne() {
   delay(1000);
   } 
   */
+ waitZ();
 
 while(sortie == 3){
 //Apres obstacle
@@ -82,23 +83,28 @@ Serial.println("Je cherche une ligne (sortie 3)");
 waitZ();
 MOTOR_SetSpeed(0,0.2); MOTOR_SetSpeed(1,0.2);
   if(IsBlack(1)==1){
+    waitZ();
     Serial.println("ligne trouve");
   MOTOR_SetSpeed(0,0.2);
           MOTOR_SetSpeed(1,0.2);
+           waitZ();
         delay(150);
     Stop();
     vibration(1,400,150);
+     waitZ();
           MOTOR_SetSpeed(1,-0.2);
           MOTOR_SetSpeed(0,0.2);
             delay(500);
+            waitZ();
             if(analogRead(3) PASNOIR && analogRead(4) PASNOIR) delay(500);
             sortie = 0;
             delay(50);
+             waitZ();
   }
 }
   
 //Point d'arrivee : Deux lignes noire parallele au robot face aux capteurs 0 et 7 (extremites)
-if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
+if((a0 NOIR && a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a5 NOIR && a6 NOIR && a7 NOIR && sortie !=3)){
   MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0); vibration(1,200,200); vibration(1,400,200); vibration(1,600,200); vibration(1,800,0);/* vibration(2,300,200);*/resetFunc();
   }
 
@@ -116,6 +122,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
     delay(1000);
   }
 
+
+
   //angle droit droite
     if((a0 NOIR && a1 NOIR && a2 NOIR && a3 NOIR && a4 NOIR && a7 PASNOIR && sortie != 3)){
         MOTOR_SetSpeed(0,0.2);
@@ -128,6 +136,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
             delay(1000);
     }
 
+   
+
     //Le robot est sur la ligne (senseurs milieu voient du noir)
     if((a3 NOIR && a4 NOIR)){
 
@@ -138,6 +148,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
     }
 
+
+
     //milieu gauche ne detecte pas la ligne mais le droit oui (sort a gauche)
     if(a3 NOIR && a4 PASNOIR){
 
@@ -146,6 +158,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
     if(a6 NOIR){sortie = 1;} if(a7 NOIR){sortie = 1;}
     if(a1 NOIR){sortie = 2;} if(a0 NOIR){sortie = 2;}
     }
+
+ 
 
     //milieu droite ne detecte pas la ligne mais le gauche oui
     if(a3 PASNOIR && a4 NOIR){
@@ -180,7 +194,8 @@ if((a0 NOIR && a3 PASNOIR && a4 PASNOIR && a7 NOIR)){
   }
  
 }
-  else{MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);}
+  else{MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);} 
+  
   }
 
 //Fonction pour vibrer, delayOn = temps que le moteur vibre, le delayOff = temps entre les vibrations
@@ -270,6 +285,7 @@ void Start(int mode){
     Serial.println("mode 1 selectionne"); //vibration(3,500,500);
         digitalWrite(46, HIGH);
     SuivreLigne();
+     waitZ();
       }
     else
     //mode libre
