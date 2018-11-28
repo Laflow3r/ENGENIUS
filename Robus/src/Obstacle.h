@@ -181,6 +181,9 @@ int obstacle_1(){
   if (doublecheck_dist(9) < 10){
 Stop();
 vibration(1,1500,0);
+
+//Si il ny a plus d'obstacle apres la vibration, cancel la maneuvre
+if (doublecheck_dist(9) > 25) {Stop(); Start(1); }
 waitZ();
       while(doublecheck_dist(9)<=25){
         MOTOR_SetSpeed(0,-0.2);
