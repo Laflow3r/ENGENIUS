@@ -223,7 +223,7 @@ void arret(float vitesse){
   stawp = 1;
 }
   int i = 0;
-
+  int Isstop = 0;
 void nunchuck(){
 
   float vitesse = 0.4;
@@ -232,17 +232,23 @@ void nunchuck(){
 
 delay(10);
 
-  obstacle_guide_simple();
+  nunchuk.update();
+
+  Isstop = obstacle_guide_simple();
     
-   
+nunchuk.update();
+    
+
+
+  nunchuk.update();
 
   Serial.print("\tstawp: "); Serial.print(stawp); Serial.print("\t ");
   Serial.print("direction: "); Serial.print(direction); Serial.print("\t ");
   //obstacle_guide_simple();
   //arreter
-  if(nunchuk.analogX < 190 && nunchuk.analogX > 60 && nunchuk.analogY < 190 && nunchuk.analogY > 60) {Serial.println("STAWP"); if(stawp == 0){arret(vitesse*direction); stawp = 1;} if(stawp==2){bouger(0,0);} stawp = 1;}
+  if(nunchuk.analogX < 190 && nunchuk.analogX > 60 && nunchuk.analogY < 190 && nunchuk.analogY > 60 && Isstop == 0) {Serial.println("STAWP"); if(stawp == 0){arret(vitesse*direction); stawp = 1;} if(stawp==2){bouger(0,0);} stawp = 1;}
   //aller tout droit
-   else if(nunchuk.analogY >= 190 ) {bouger(vitesse,vitesse);; direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
+   else if(nunchuk.analogY >= 190 && Isstop == 0 ) {bouger(vitesse,vitesse); direction = 1; stawp=0; Serial.println("J'avance CR*SS"); }
   //Reculer
   else if(nunchuk.analogY <= 60 ) {Serial.println("Beeeeep Beeeeep Beeeeep"); direction = -1; stawp =0; bouger(-vitesse,-vitesse);}
   //Aller a droite
@@ -252,7 +258,7 @@ delay(10);
   }
   else{bouger(0,0);}
   
-
+  
 }
 
 void PrintNunchuk(){

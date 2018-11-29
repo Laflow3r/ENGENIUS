@@ -95,14 +95,20 @@ void allo(){
 
 void vibration(int fois,int delayOn, int delayOff);
 
-void obstacle_guide_simple(){
+int obstacle_guide_simple(){
   
+int etat = 0;
   
   if (doublecheck_dist(9) < 20 && IsForward() == 1){
+      UpdateNun();
+      etat = 1;
       MOTOR_SetSpeed(0,0); MOTOR_SetSpeed(1,0);
+      Serial.println("\tObstacle droit devant!!");
       vibration(2,750,150);
+      UpdateNun();
       
-  }
+  } else if(doublecheck_dist(9) < 20) etat = 1;
+  return etat;
 }
 
 int obstacle_libre_simple(){
